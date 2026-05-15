@@ -1,0 +1,27 @@
+name: Build APK MADFAZ Music
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Tarik kode aplikasi (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Masak APK pake Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v2
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: master
+
+      - name: Simpan Hasil APK (Upload Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: MADFAZ-Music-APK
+          path: bin/*.apk
+          
