@@ -6,7 +6,6 @@ on:
 
 jobs:
   build-android:
-    # Kita pake server Ubuntu 22.04 yang paling stabil buat Kivy
     runs-on: ubuntu-22.04 
 
     steps:
@@ -28,8 +27,9 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython virtualenv
 
-      - name: Masak APK (Mulai Kompilasi)
-        run: buildozer android debug
+      - name: Masak APK (Mulai Kompilasi Auto-Yes)
+        # Tambahin "yes |" biar robotnya otomatis setuju lisensi Android
+        run: yes | buildozer android debug
 
       - name: Simpan Hasil APK (Panen)
         uses: actions/upload-artifact@v4
