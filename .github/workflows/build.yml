@@ -6,23 +6,34 @@ on:
 
 jobs:
   build-android:
-    runs-on: ubuntu-latest
+    # Kita pake server Ubuntu 22.04 yang paling stabil buat Kivy
+    runs-on: ubuntu-22.04 
 
     steps:
       - name: Tarik kode aplikasi (Checkout)
         uses: actions/checkout@v4
 
-      - name: Masak APK pake Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      - name: Setup Python (Siapin Mesin)
+        uses: actions/setup-python@v5
         with:
-          command: buildozer android debug
-          buildozer_version: master
+          python-version: '3.10'
 
-      - name: Simpan Hasil APK (Upload Artifact)
+      - name: Install System Dependencies (Siapin Alat Masak)
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+
+      - name: Install Buildozer (Panggil Koki)
+        run: |
+          pip install --upgrade pip
+          pip install buildozer cython virtualenv
+
+      - name: Masak APK (Mulai Kompilasi)
+        run: buildozer android debug
+
+      - name: Simpan Hasil APK (Panen)
         uses: actions/upload-artifact@v4
         with:
           name: MADFAZ-Music-APK
           path: bin/*.apk
-          
           
